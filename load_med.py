@@ -10,7 +10,7 @@ from data import DataLoader
 
 NB_TRAIN_SAMPLES = 3000 # 3000 training samples
 NB_VALID_SAMPLES = 100 # 100 validation samples
-NUM_CLASSES = 10
+NUM_CLASSES = 23
 TRAIN_FOLDER = os.path.abspath('./med_dataset/train_emb')
 TEST_FOLDER = os.path.abspath('./med_dataset/test_emb')
 

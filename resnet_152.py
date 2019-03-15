@@ -11,7 +11,7 @@ from sklearn.metrics import log_loss
 
 from custom_layers.scale_layer import Scale
 
-from load_cifar10 import load_cifar10_data
+from load_med import load_med_data
 
 import sys
 sys.setrecursionlimit(3000)
@@ -180,12 +180,12 @@ if __name__ == '__main__':
 
     img_rows, img_cols = 224, 224 # Resolution of inputs
     channel = 3
-    num_classes = 10 
+    num_classes = 23
     batch_size = 8
     nb_epoch = 10
 
     # Load Cifar10 data. Please implement your own load_data() module for your own dataset
-    X_train, Y_train, X_valid, Y_valid = load_cifar10_data(img_rows, img_cols)
+    X_train, Y_train, X_valid, Y_valid = load_med_data(img_rows, img_cols)
 
     # Load our model
     model = resnet152_model(img_rows, img_cols, channel, num_classes)
