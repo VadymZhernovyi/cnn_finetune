@@ -55,34 +55,29 @@ class DataLoader(object):
     @param folder: which folder to read from.
     @param batch_size: number of images to process at once.
     """
-    def __init__(self, folder, batch_size=1, embedding_size=2048, extension='npy'):
+    def __init__(self, folder, embedding_size=2048, extension='npy'):
         files = glob(os.path.join(folder, '*', '*.{}'.format(extension)))
         random.shuffle(files)
         self.generator = iter(files)
         self.files = files
-        self.batch_size = batch_size
         self.embedding_size = embedding_size
-        self.size = len(files)
-        self.batch_idx = -1
         
     def load_data(self):
-        for i in range(self.batch_size):
+        i = 0
+        while True:
             try:
                 path = next(self.generator)
-                klass = path.split('/')[-2]
-                klass = CLASS_NAME_TO_IX[klass]
+                clss = path.split('/')[-2]
+                clss = CLASS_NAME_TO_IX[clss]
                 data[i] = np.load(path)
-                target[i] = int(klass)
+                target[i] = int(clss)
+                i += 1
             except StopIteration:
                 data = data[:i]
                 target = target[:i]
-        
-        self.batch_idx += 1
-        return (data, target)
+                break
 
-    def reset(self):
-        self.generator = iter(self.files)
-        self.batch_idx = -1
+        return (data, target)
 
 
 def train_test_split(img_folder, train_folder, test_folder, split_frac=0.8):
