@@ -46,7 +46,7 @@ CLASS_NAME_TO_IX = {
     u'Warts Molluscum and other Viral Infections': 20,
 }
 
-CLASS_IX_TO_NAME = {v: k for k, v in CLASS_NAME_TO_IX.iteritems()}
+CLASS_IX_TO_NAME = {v: k for k, v in CLASS_NAME_TO_IX.items()}
 
 
 class DataLoader(object):
@@ -64,13 +64,15 @@ class DataLoader(object):
         
     def load_data(self):
         i = 0
+        data = []
+        target = []
         while True:
             try:
                 path = next(self.generator)
-                clss = path.split('/')[-2]
+                clss = path.split('\\')[-2]
                 clss = CLASS_NAME_TO_IX[clss]
-                data[i] = np.load(path)
-                target[i] = int(clss)
+                data.append(np.load(path))
+                target.append(int(clss))
                 i += 1
             except StopIteration:
                 data = data[:i]

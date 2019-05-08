@@ -1,4 +1,3 @@
-
 import os
 import cv2
 import numpy as np
@@ -11,8 +10,8 @@ from data import DataLoader
 NB_TRAIN_SAMPLES = 3000 # 3000 training samples
 NB_VALID_SAMPLES = 100 # 100 validation samples
 NUM_CLASSES = 23
-TRAIN_FOLDER = os.path.abspath('./med_dataset/train_emb')
-TEST_FOLDER = os.path.abspath('./med_dataset/test_emb')
+TRAIN_FOLDER = os.path.abspath('./med_data/train_emb')
+TEST_FOLDER = os.path.abspath('./med_data/test_emb')
 
 def load_med_data(img_rows, img_cols):
     # Load our training and validation sets

@@ -90,3 +90,4 @@ ENV/
 
 *.h5
 *.swp
+/med_data
