@@ -8,17 +8,14 @@ import random
 import numpy as np
 from glob import glob
 
-import torch
-from PIL import Image
-import torchvision.transforms as transforms
+import cv2
 
-# use ImageNet preprocessing (since ResNet is trained on it)
-preprocessing = transforms.Compose([
-    transforms.Scale(256),
-    transforms.CenterCrop(224),
-    transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406],
-                         [0.229, 0.224, 0.225])])
+def preprocess(image):
+    # use ImageNet preprocessing (since ResNet is trained on it)
+    #scale to 256
+    #center crop to 224
+    #normalize ot [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
+    pass
 
 CLASS_NAME_TO_IX = {
     u'Acne and Rosacea Photos': 2,
@@ -48,22 +45,18 @@ CLASS_NAME_TO_IX = {
 
 CLASS_IX_TO_NAME = {v: k for k, v in CLASS_NAME_TO_IX.items()}
 
-
 class DataLoader(object):
-    """Load (image, class) pairs into tuples of NumPyArrays.
+    """Prepare (image, class) pairs.
 
     @param folder: which folder to read from.
-    @param batch_size: number of images to process at once.
     """
-    def __init__(self, folder, embedding_size=2048, extension='npy'):
-        files = glob(os.path.join(folder, '*', '*.{}'.format(extension)))
+    def __init__(self, folder):
+        files = glob(os.path.join(folder, '*', '*.jpg'))
         random.shuffle(files)
         self.generator = iter(files)
         self.files = files
-        self.embedding_size = embedding_size
         
     def load_data(self):
-        i = 0
         data = []
         target = []
         while True:
@@ -71,12 +64,9 @@ class DataLoader(object):
                 path = next(self.generator)
                 clss = path.split('\\')[-2]
                 clss = CLASS_NAME_TO_IX[clss]
-                data.append(np.load(path))
+                data.append(cv2.imread(path))
                 target.append(int(clss))
-                i += 1
             except StopIteration:
-                data = data[:i]
-                target = target[:i]
                 break
 
         return (data, target)
