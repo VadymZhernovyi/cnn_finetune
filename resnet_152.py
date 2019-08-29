@@ -183,21 +183,23 @@ if __name__ == '__main__':
     num_classes = 23
     batch_size = 8
     nb_epoch = 10
+    trainAmount = 5000
+    testAmount  = 500
 
     # Load Cifar10 data. Please implement your own load_data() module for your own dataset
-    X_train, Y_train, X_valid, Y_valid = load_med_data(img_rows, img_cols)
+    X_train, Y_train, X_valid, Y_valid = load_med_data(img_rows, img_cols, trainAmount, testAmount)
 
     # Load our model
     model = resnet152_model(img_rows, img_cols, channel, num_classes)
 
     # Start Fine-tuning
-    model.fit(X_train, Y_train,
+    print(model.fit(X_train, Y_train,
               batch_size=batch_size,
               nb_epoch=nb_epoch,
               shuffle=True,
               verbose=1,
               validation_data=(X_valid, Y_valid),
-              )
+              ))
 
     # Make predictions
     predictions_valid = model.predict(X_valid, batch_size=batch_size, verbose=1)

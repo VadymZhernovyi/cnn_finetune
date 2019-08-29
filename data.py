@@ -56,13 +56,14 @@ class DataLoader(object):
         self.generator = iter(files)
         self.files = files
         
-    def load_data(self):
+    def load_data(self, amount):
         data = []
         target = []
-        while True:
+        for i in range(amount):
             try:
+                print("Loading " + str(i) + " images")
                 path = next(self.generator)
-                clss = path.split('\\')[-2]
+                clss = path.split('/')[-2]
                 clss = CLASS_NAME_TO_IX[clss]
                 data.append(cv2.imread(path))
                 target.append(int(clss))

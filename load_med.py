@@ -14,12 +14,12 @@ NUM_CLASSES = 23
 TRAIN_FOLDER = os.path.abspath('./med_data/train')
 TEST_FOLDER = os.path.abspath('./med_data/test')
 
-def load_med_data(img_rows, img_cols):
+def load_med_data(img_rows, img_cols, trainAmount, testAmount):
     # Load our training and validation sets
     train_loader = DataLoader(TRAIN_FOLDER)
     test_loader = DataLoader(TEST_FOLDER)
-    (X_train, Y_train) = train_loader.load_data()
-    (X_valid, Y_valid) = test_loader.load_data()
+    (X_train, Y_train) = train_loader.load_data(trainAmount)
+    (X_valid, Y_valid) = test_loader.load_data(testAmount)
     #(X_train, Y_train), (X_valid, Y_valid) = cifar10.load_data()
 
     # Resize trainging images
