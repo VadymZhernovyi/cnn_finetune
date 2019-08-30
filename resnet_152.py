@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from keras.models import Sequential
+from keras.callbacks import EarlyStopping
 from keras.optimizers import SGD
 from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, add, Reshape, Activation
 from keras.layers.normalization import BatchNormalization
@@ -114,7 +115,7 @@ def resnet152_model(img_rows, img_cols, color_type=1, num_classes=None):
 
     # Handle Dimension Ordering for different backends
     global bn_axis
-    if K.image_dim_ordering() == 'tf':
+    if K.common.image_dim_ordering() == 'tf':
       bn_axis = 3
       img_input = Input(shape=(img_rows, img_cols, color_type), name='data')
     else:
@@ -150,7 +151,7 @@ def resnet152_model(img_rows, img_cols, color_type=1, num_classes=None):
 
     model = Model(img_input, x_fc)
 
-    if K.image_dim_ordering() == 'th':
+    if K.common.image_dim_ordering() == 'th':
       # Use pre-trained weights for Theano backend
       weights_path = 'imagenet_models/resnet152_weights_th.h5'
     else:
@@ -182,9 +183,9 @@ if __name__ == '__main__':
     channel = 3
     num_classes = 23
     batch_size = 8
-    nb_epoch = 10
-    trainAmount = 5000
-    testAmount  = 500
+    nb_epoch = 100
+    trainAmount = 10
+    testAmount  = 1
 
     # Load Cifar10 data. Please implement your own load_data() module for your own dataset
     X_train, Y_train, X_valid, Y_valid = load_med_data(img_rows, img_cols, trainAmount, testAmount)
@@ -192,6 +193,7 @@ if __name__ == '__main__':
     # Load our model
     model = resnet152_model(img_rows, img_cols, channel, num_classes)
 
+    es_callback = EarlyStopping(monitor='val_loss', patience=3)
     # Start Fine-tuning
     print(model.fit(X_train, Y_train,
               batch_size=batch_size,
@@ -199,6 +201,7 @@ if __name__ == '__main__':
               shuffle=True,
               verbose=1,
               validation_data=(X_valid, Y_valid),
+              callbacks=[es_callback]
               ))
 
     # Make predictions
